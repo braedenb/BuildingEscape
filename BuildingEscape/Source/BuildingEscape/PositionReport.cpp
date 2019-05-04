@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PositionReport.h"
+#include "GameFramework/Actor.h"
+#include "Math/TransformNonVectorized.h"
 
 
 // Sets default values for this component's properties
@@ -19,8 +21,9 @@ void UPositionReport::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("Position report reporting for duty on chair!"));
-	
+	FString name = GetOwner()->GetName();
+	FString pos = GetOwner()->GetTransform().GetLocation().ToString();
+	UE_LOG(LogTemp, Warning, TEXT("%s is at %s"), *name, *pos);
 }
 
 
