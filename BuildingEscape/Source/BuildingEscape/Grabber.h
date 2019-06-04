@@ -30,8 +30,10 @@ private:
 	// How far ahead of the player can we reach in cm
 	float Reach = 100.f;
 	
+	// handles grabbing and releasing components
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
+	// handles user input
 	UInputComponent* InputComponent = nullptr;
 
 	// Find attached physics handle
@@ -44,8 +46,14 @@ private:
 	void Grab();
 
 	// Return hit for first physics body in reach
-	FHitResult GetFirstPhysicsBodyInReach() const;
+	const FHitResult GetFirstPhysicsBodyInReach();
 
-	// Called when grab is released
+	// Return the start point of the component
+	FVector GetReachLineStart();
+
+	// Return the end point of the component's grabbing reach
+	FVector GetReachLineEnd();
+
+	// Releases the physics handle
 	void Release();
 };
