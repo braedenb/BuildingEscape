@@ -30,38 +30,17 @@ void UOpenDoor::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("%s missing pressure plate"), *(Owner->GetName()));
 }
 
-void UOpenDoor::OpenDoor()
-{
-	if (!Owner)
-		return;
-
-	OnOpenRequest.Broadcast();
-}
-
-void UOpenDoor::CloseDoor()
-{
-	if (!Owner)
-		return;
-
-	Owner->SetActorRotation(FRotator(0.f, 0.f, 0.f));
-}
-
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Poll the trigger volume
-	// If the total mass of all actors on the pressure plate is more than 50 kg, open the door
-	if (GetTotalMassOfActorsOnPlate() > 30.f) // TODO make into a parameter
-	{
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
-	}
-
-	// Check if it's time to close the door
-	if (GetWorld()->GetTimeSeconds() >= LastDoorOpenTime + DoorCloseDelay)
-		CloseDoor();
+	// If the total mass of all actors on the pressure plate is more than the specified trigger mass, open the door
+	if (GetTotalMassOfActorsOnPlate() > TriggerMass)
+		OnOpen.Broadcast();
+	else
+		OnClose.Broadcast();
 }
 
 // Returns total mass in kg
